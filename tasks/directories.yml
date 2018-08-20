@@ -1,0 +1,8 @@
+---
+### EXAMPLE
+  - name: Create directory for TOMCAT
+    file:
+      path: /logs/{{ deploy_environment }}/{{ ansible_hostname }}/tomcat
+      recurse: yes
+      state: directory
+    when: "'tomcat' in group_names"

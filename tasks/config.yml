@@ -1,0 +1,41 @@
+---
+  - name: Create directories for logbak
+    file:
+      dest: "{{ item }}"
+      state: directory
+      owner: jrun
+      group: jrun
+    with_items:
+      - /opt/logbak/
+      - /opt/logbak/conf.d/
+      - /opt/logbak/reports
+
+  - name: copy logbak.py to /opt/logbak
+    copy:
+      src: "{{ role_path }}/files/logbak.py"
+      dest: /opt/logbak/logbak.py
+      owner: jrun
+      group: jrun
+      mode: 0755
+
+### EXAMPLE
+  - name: Copy logbak config - tomcat
+    template:
+      src: tomcat.conf.j2
+      dest: /opt/logbak/conf.d/tomcat.conf
+      owner: jrun
+      group: jrun
+    when: "'tomcat' in group_names"
+
+  - name: Assemble different configs into 1 file
+    assemble:
+      src: /opt/logbak/conf.d/
+      dest: /opt/logbak/logbak.conf
+
+  - name: Setup cron to run logbak.py at 10pm
+    cron:
+      name: "Run logbak.py"
+      user: jrun
+      hour: "22"
+      minute: "00"
+      job: "/opt/logbak/logbak.py"

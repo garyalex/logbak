@@ -1,0 +1,9 @@
+---
+- hosts:
+    - logbak-clients
+  roles:
+    - system_logrotate
+    - task_notify_slack
+  vars:
+    playbook_name: system_logrotate
+    slack_group_message: true
