@@ -27,7 +27,7 @@ def logmessage(message, level):
     logtimestamp = formatdate()
     level = int(level)
     if debugflag:
-        print message
+        print(message)
     f = open(logfile, 'a')
     f.write('%s LOGBAK %s %s\n' % (logtimestamp, levels[level], message))
     f.close()
@@ -88,30 +88,9 @@ for configlines in configfile:
             timestamp = os.path.getmtime(fullpath)
             modtime = datetime.datetime.fromtimestamp(timestamp)
 
-            # If we set matched to True we perform the needed operation
-            matchgzip = False
-            matchmv = False
-
-            # Check if file matches regex to gzip
-            if regexgzip.search(filename):
-                # Now check modified time
-                if gztime > modtime:
-                    matchgzip = True
-
-            # Check if file matches regex to mv
-            if regexmv.search(filename):
-                # Now check modified time
-                if mvtime > modtime:
-                    matchmv = True
-
-            # If our path is not a file remove match
-            if not os.path.isfile(fullpath):
-                matchmv = False
-                matchgzip = False
-
-            # Now perform our actions
-            if matchgzip:
+            # Check if file matches regex to gzip and mod time
+            if regexgzip.search(filename) and gztime > modtime and os.path.isfile(fullpath):
                 gzipfile(fullpath, modtime)
-
-            if matchmv:
+            # Check if file matches regex to mv and mod time
+            elif regexmv.search(filename) and mvtime > modtime and os.path.isfile(fullpath):
                 mvfile(fullpath, modtime, filename, backdir)
