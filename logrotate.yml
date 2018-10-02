@@ -6,4 +6,5 @@
     - task_notify_slack
   vars:
     playbook_name: system_logrotate
-    slack_group_message: true
+    deploy_environment: "test"
+    

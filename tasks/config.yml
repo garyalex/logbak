@@ -3,8 +3,8 @@
     file:
       dest: "{{ item }}"
       state: directory
-      owner: jrun
-      group: jrun
+      owner: myuser
+      group: myuser
     with_items:
       - /opt/logbak/
       - /opt/logbak/conf.d/
@@ -14,8 +14,8 @@
     copy:
       src: "{{ role_path }}/files/logbak.py"
       dest: /opt/logbak/logbak.py
-      owner: jrun
-      group: jrun
+      owner: myuser
+      group: myuser
       mode: 0755
 
 ### EXAMPLE
@@ -23,8 +23,8 @@
     template:
       src: tomcat.conf.j2
       dest: /opt/logbak/conf.d/tomcat.conf
-      owner: jrun
-      group: jrun
+      owner: myuser
+      group: myuser
     when: "'tomcat' in group_names"
 
   - name: Assemble different configs into 1 file
@@ -35,7 +35,7 @@
   - name: Setup cron to run logbak.py at 10pm
     cron:
       name: "Run logbak.py"
-      user: jrun
+      user: myuser
       hour: "22"
       minute: "00"
       job: "/opt/logbak/logbak.py"
